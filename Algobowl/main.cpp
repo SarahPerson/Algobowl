@@ -14,8 +14,13 @@ vector<int> weights;
 vector<set<int>> subsets;
 vector<int> solutionIDs;
 
+void ReadInputs(string filename);
+void WriteSolution();
+void SolutionChecker();
+
 int main() {
     cout << "Hello World!\n";
+	ReadInputs("test.txt");
     return 0;
 }
 
@@ -24,21 +29,22 @@ void ReadInputs(string filename) {
 	string input;
 	inputs >> input;
 	n = stoi(input);		//Size of universal set
+	cout << n << endl;
 	for (int i = 1; i <= n; i++) {		//Construct Universal set
 		U.insert(i);
 	}
 	inputs >> input;
 	m = stoi(input);		//Number of subsets
-
+	cout << m << endl;
 	while (!inputs.eof()) {
 		set<int> temp;
-		while (inputs.peek() != '/n') {		//Build subset
+		do {										//Build subset
 			inputs >> input;
 			temp.insert(stoi(input));
-		}
-		subsets.push_back(temp);	//Add subset to vector
+		} while (inputs.peek() != '\n');
+		subsets.push_back(temp);				//Add subset to vector
 		inputs >> input;
-		weights.push_back(stoi(input));		//Add weight to vector at same index. This links their index as a pseudo-ID
+		weights.push_back(stoi(input));			//Add weight to vector at same index. This links their index as a pseudo-ID
 	}
 	inputs.close();
 }
