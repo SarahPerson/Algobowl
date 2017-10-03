@@ -75,13 +75,13 @@ void WriteInputFile() {
     ofstream out("input.txt");
     out << SetSize << endl;
     for (int i = 0; i < FileSize; i++) {
-        //print out weight between 30 and 90
-        out << rand() % 60 + 30 << endl;
         for (int i = 0; i < rand() % 90 + 1; i++)
         {
             out << rand() % SetSize + 1 << " ";
         }
         out << endl;
+		//print out weight between 30 and 90
+		out << rand() % 60 + 30 << endl;
     }
 }
 
