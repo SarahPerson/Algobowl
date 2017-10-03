@@ -15,6 +15,7 @@ vector<set<int>> subsets;
 vector<int> solutionIDs;
 
 void ReadInputs(string filename);
+void ReadSolution(string filename);
 void WriteSolution();
 void SolutionChecker();
 
@@ -47,6 +48,10 @@ void ReadInputs(string filename) {
 		weights.push_back(stoi(input));			//Add weight to vector at same index. This links their index as a pseudo-ID
 	}
 	inputs.close();
+}
+
+void ReadSolution(string filename) {
+
 }
 
 void WriteSolution() {
