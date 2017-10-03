@@ -2,7 +2,7 @@
 
 #include <string>
 #include <iostream>
-#include <unordered_set>
+#include <set>
 
 using namespace std;
 
@@ -12,9 +12,12 @@ private:
     
 public:
     Subset();
-    Subset(unordered_set<int> _set, int _weight, string _id);
-    unordered_set<int> set;
+    Subset(set<int> _set, int _weight, string _id);
+    set<int> set;
     string id;
     double weight;
+    
+    //methods
+    string ToString();
 
 };
