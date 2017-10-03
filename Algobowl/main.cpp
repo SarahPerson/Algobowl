@@ -4,6 +4,7 @@
 #include <vector>
 #include <set>
 #include <map>
+#include <time.h>
 using namespace std;
 
 int bestWeight;
@@ -18,10 +19,12 @@ void ReadInputs(string filename);
 void ReadSolution(string filename);
 void WriteSolution();
 void SolutionChecker();
+void WriteInputFile();
 
 int main() {
     cout << "Hello World!\n";
 	ReadInputs("test.txt");
+    WriteInputFile();
     return 0;
 }
 
@@ -61,6 +64,25 @@ void WriteSolution() {
 		outputs << solutionIDs.at(i) << " ";
 	}
 	outputs.close();
+}
+
+void WriteInputFile() {
+    // initialize random
+    srand(time(NULL));
+
+    int FileSize = 200;
+    int SetSize = 45;
+    ofstream out("input.txt");
+    out << SetSize << endl;
+    for (int i = 0; i < FileSize; i++) {
+        //print out weight between 30 and 90
+        out << rand() % 60 + 30 << endl;
+        for (int i = 0; i < rand() % 90 + 1; i++)
+        {
+            out << rand() % SetSize + 1 << " ";
+        }
+        out << endl;
+    }
 }
 
 void SolutionChecker() {
