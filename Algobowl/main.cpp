@@ -26,7 +26,7 @@ vector<Subset>  FindSubset();
 
 int main() {
     cout << "Hello World!\n";
-	ReadInputs("test.txt");
+	ReadInputs("input.txt");
 
     //print each element in map
     cout << "elements in map" << endl;
@@ -68,11 +68,11 @@ vector<Subset>  FindSubset() {
             current = j->second;
 
             //check if the current or the current max makes the union larger
-            if (subset.setUnion(current).size > subset.setUnion(maximum).size) {
+            if (subset.setUnion(current).size() > subset.setUnion(maximum).size()) {
                 maximum = current;
             }
             //if the same, select the one with the lowest weight
-            else if (subset.setUnion(current).size = subset.setUnion(maximum).size) {
+            else if (subset.setUnion(current).size() == subset.setUnion(maximum).size()) {
                 if (current.weight < maximum.weight) {
                     maximum = current;
                 }
@@ -84,7 +84,7 @@ vector<Subset>  FindSubset() {
         solution.push_back(maximum);
 
         //check if set has been filled
-        if (subset.intSet.size = n) {
+        if (subset.intSet.size() == n) {
             return solution;
         }
 
