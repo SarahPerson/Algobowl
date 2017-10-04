@@ -11,7 +11,7 @@
 
 using namespace std;
 
-int bestWeight;
+
 int n;
 int m;
 set<int> U;
@@ -20,7 +20,7 @@ vector<int> solutionIDs;
 
 void ReadInputs(string filename);
 void ReadSolution(string filename);
-void WriteSolution();
+void WriteSolution(vector<Subset> ans);
 void SolutionChecker();
 void WriteInputFile();
 vector<Subset>  FindSubset();
@@ -43,10 +43,12 @@ int main() {
         cout << result[i].ToString() << endl;
     }
 
-    char a;
-    cin >> a;
 
-    //WriteInputFile(); //only run if you want to recreate the input file
+    WriteSolution(result);
+    
+    cout << "DONE!" << endl;
+    int temp;
+    cin >> temp;
     return 0;
 }
 
@@ -173,12 +175,17 @@ void ReadSolution(string filename) {
 
 }
 
-void WriteSolution() {
+void WriteSolution(vector<Subset> ans) {
     
 	ofstream outputs("ourSolution.txt");
-	outputs << bestWeight << endl;
-	for (int i = 0; i < solutionIDs.size(); i++) {
-		outputs << solutionIDs.at(i) << " ";
+    int bestWeight = 0;
+    for (Subset i : ans)
+    {
+        bestWeight += i.weight;
+    }
+    outputs << bestWeight << endl;
+	for (Subset i : ans) {
+		outputs << i.id << " ";
 	}
 	outputs.close();
    
