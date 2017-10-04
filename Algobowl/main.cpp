@@ -5,6 +5,7 @@
 #include <set>
 #include <map>
 #include <time.h>
+#include <sstream>
 #include "Subset.h"
 
 
@@ -26,7 +27,7 @@ vector<Subset>  FindSubset();
 
 int main() {
     cout << "Hello World!\n";
-	ReadInputs("input_group9.txt");
+	ReadInputs("input.txt");
     cin >> n;
     //print each element in map
     cout << "elements in map" << endl;
@@ -41,6 +42,9 @@ int main() {
     for (int i = 0; i < result.size(); i++) {
         cout << result[i].ToString() << endl;
     }
+
+    char a;
+    cin >> a;
 
     //WriteInputFile(); //only run if you want to recreate the input file
     return 0;
@@ -118,11 +122,23 @@ void ReadInputs(string filename) {
         Subset temp;
         // set the id 
         temp.id = "S" + to_string(idCount);
-
-		do {										//Build subset
+        
+        /* //Original buliding subset subroutine
+		do {										
 			inputs >> input;
 			temp.intSet.insert(stoi(input));
 		} while (inputs.peek() != '\n');
+        */
+
+        // New "building the subset" routine
+        string placeholder;                     // bucket to put line of text in        
+        getline(inputs, placeholder);           // the goddamn english chanel or some shit
+        stringstream ssNumberBoat(placeholder); // boat that transfers the numbers from the bucket into the destination variable
+
+        int portionOfSubset = 0;
+        while (ssNumberBoat >> portionOfSubset) {
+            temp.intSet.insert(portionOfSubset);
+        }
 
         // get the weight of the subset
         inputs >> input;
@@ -156,14 +172,14 @@ void ReadSolution(string filename) {
 }
 
 void WriteSolution() {
-    /*
+    
 	ofstream outputs("ourSolution.txt");
 	outputs << bestWeight << endl;
 	for (int i = 0; i < solutionIDs.size(); i++) {
 		outputs << solutionIDs.at(i) << " ";
 	}
 	outputs.close();
-    */
+   
 }
 
 void WriteInputFile() {
