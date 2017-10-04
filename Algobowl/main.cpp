@@ -26,8 +26,8 @@ vector<Subset>  FindSubset();
 
 int main() {
     cout << "Hello World!\n";
-	ReadInputs("input.txt");
-
+	ReadInputs("input_group9.txt");
+    cin >> n;
     //print each element in map
     cout << "elements in map" << endl;
     for (auto iterator = subsets.begin(); iterator != subsets.end(); iterator++) {
@@ -114,7 +114,7 @@ void ReadInputs(string filename) {
 	//cout << m << endl;
 
     int idCount = 1;
-	while (!inputs.eof()) {
+	while (idCount<m){//!inputs.eof()) {
         Subset temp;
         // set the id 
         temp.id = "S" + to_string(idCount);
