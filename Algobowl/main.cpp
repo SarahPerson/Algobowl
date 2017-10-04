@@ -17,6 +17,7 @@ int m;
 set<int> U;
 map < set<int>, Subset> subsets;
 vector<int> solutionIDs;
+string inputfile = "input_group5.txt";
 
 void ReadInputs(string filename);
 void ReadSolution(string filename);
@@ -27,13 +28,14 @@ vector<Subset>  FindSubset();
 
 int main() {
     cout << "Hello World!\n";
-	ReadInputs("test.txt");
-
+	ReadInputs(inputfile);
+    /*
     //print each element in map
     cout << "elements in map" << endl;
     for (auto iterator = subsets.begin(); iterator != subsets.end(); iterator++) {
         cout << iterator->second.ToString() << endl;
     }
+    */
 
     
     cout << "solution" << endl;
@@ -42,10 +44,11 @@ int main() {
     for (int i = 0; i < result.size(); i++) {
         cout << result[i].ToString() << endl;
     }
-
-
-    WriteSolution(result);
     
+
+
+     WriteSolution(result);
+     SolutionChecker();
     cout << "DONE!" << endl;
     int temp;
     cin >> temp;
@@ -55,10 +58,9 @@ int main() {
 vector<Subset>  FindSubset() {
     Subset subset;
     Subset current = Subset(set<int>(), 0, "S_");
-    Subset maximum ;
+    Subset maximum;
     Subset next;
     vector<Subset> solution;
-    /*
     for (auto iterator = subsets.begin(); iterator != subsets.end(); iterator++) {
         // clear solution
         solution.clear();
@@ -96,38 +98,8 @@ vector<Subset>  FindSubset() {
                 return solution;
             }
         }
-        
-
-        //check if set has been filled
-        if (subset.intSet.size() == n) {
-            return solution;
-        }
 
 
-    }
-    */
-
-    //get starting element and add to solution
-    subset = subsets.begin()->second;
-    solution.push_back(subset);
-
-    for (auto iterator = subsets.begin(); iterator != subsets.end(); iterator++) {
-        
-        //get starting elementand add to solution
-        current = iterator->second;
-        solution.push_back(subset);
-
-        // check if element increases size of the set
-        if (subset.setUnion(current).size() > subset.intSet.size())
-        {
-            //add element to subset
-            // find the union with the new maximum
-            subset.intSet = subset.setUnion(current);
-            //add to the solution
-            solution.push_back(current);
-        }
-
-    
         //check if set has been filled
         if (subset.intSet.size() == n) {
             return solution;
@@ -137,45 +109,56 @@ vector<Subset>  FindSubset() {
     }
 }
 
+
 void ReadInputs(string filename) {
 	ifstream inputs(filename);
+   
 	string input;
-	inputs >> input;
+    getline(inputs, input);
+
 	n = stoi(input);		//Size of universal set
 	//cout << n << endl;
-	for (int i = 1; i <= n; i++) {		//Construct Universal set
-		U.insert(i);
-	}
-	inputs >> input;
+	//for (int i = 1; i <= n; i++) {		//Construct Universal set
+	//	U.insert(i);
+	//}
+    getline(inputs, input);
 	m = stoi(input);		//Number of subsets
 	//cout << m << endl;
 
     int idCount = 1;
-	while (idCount<m){//!inputs.eof()) {
+	while (idCount<m){
         Subset temp;
         // set the id 
-        temp.id = "S" + to_string(idCount);
+        temp.id = to_string(idCount);
         
-        /*
-         //Original buliding subset subroutine
-		do {										
-			inputs >> input;
-			temp.intSet.insert(stoi(input));
-		} while (inputs.peek() != '\n');
-        */
+        
+
 
         // New "building the subset" routine
         string placeholder;                     // bucket to put line of text in        
         getline(inputs, placeholder);           // the goddamn english chanel or some shit
-        stringstream ssNumberBoat(placeholder); // boat that transfers the numbers from the bucket into the destination variable
 
-        int portionOfSubset = 0;
-        while (ssNumberBoat >> portionOfSubset) {
-            temp.intSet.insert(portionOfSubset);
+        //cout << "GetLine: " <<placeholder<< endl;
+        int start = 0;
+        int end = 0;
+        for (int i = 0; i < placeholder.size(); i++) {
+            if (placeholder[i] == ' ' && i!=0) {
+                end = i;
+                temp.intSet.insert(stoi(placeholder.substr(start, end - start)));
+                start = end;
+            }
+            if (i == placeholder.size() - 1 && placeholder[i]!=' ')
+            {
+                end = placeholder.size();
+                temp.intSet.insert(stoi(placeholder.substr(start, end - start)));
+
+            }
         }
 
+
+
         // get the weight of the subset
-        inputs >> input;
+        getline(inputs, input);
         temp.weight = stoi(input);
 
         idCount++; //increment id count
@@ -193,7 +176,7 @@ void ReadInputs(string filename) {
 
         }
 
-        cout << idCount << endl;
+        //cout << idCount << endl;
 
 	}
 
@@ -242,6 +225,120 @@ void WriteInputFile() {
 }
 
 void SolutionChecker() {
-	ReadInputs("ourInput.txt");
+    int solWeight;
+    vector<int> solution;
+
+    //read current solution
+    string filename = "ourSolution.txt";
+    ifstream sol(filename);
+
+    string placeholder;
+    getline(sol, placeholder);
+    solWeight = stoi(placeholder);
+
+    string temp;
+      
+    getline(sol, placeholder);           // the goddamn english chanel or some shit
+
+    int start = 0;
+    int end = 0;
+    for (int i = 0; i < placeholder.size(); i++) {
+        if (placeholder[i] == ' ' && i != 0) {
+            end = i;
+            solution.push_back((stoi(placeholder.substr(start, end - start))));
+            start = end;
+        }
+        if (i == placeholder.size() - 1 && placeholder[i] != ' ')
+        {
+            end = placeholder.size();
+            solution.push_back(stoi(placeholder.substr(start, end - start)));
+
+        }
+    }
+
+
+    sol.close();
+
+    ///////////
+    vector<Subset> inputvals;
+    filename = inputfile;
+    ifstream inputs(filename);
+
+    string input;
+    getline(inputs, input);
+    n = stoi(input);
+    getline(inputs, input);
+    m = stoi(input);		//Number of subsets
+                            //cout << m << endl;
+
+    int idCount = 1;
+    while (idCount<=m) {
+        Subset temp;
+        // set the id 
+        temp.id = to_string(idCount);
+
+
+
+
+        // New "building the subset" routine
+        string placeholder;                     // bucket to put line of text in        
+        getline(inputs, placeholder);           // the goddamn english chanel or some shit
+
+        int start = 0;
+        int end = 0;
+        for (int i = 0; i < placeholder.size(); i++) {
+            if (placeholder[i] == ' ' && i != 0) {
+                end = i;
+                temp.intSet.insert(stoi(placeholder.substr(start, end - start)));
+                start = end;
+            }
+            if (i == placeholder.size() - 1 && placeholder[i] != ' ')
+            {
+                end = placeholder.size();
+                temp.intSet.insert(stoi(placeholder.substr(start, end - start)));
+
+            }
+        }
+
+        
+        // get the weight of the subset
+        getline(inputs, input);
+        temp.weight = stoi(input);
+
+        idCount++; //increment id count
+
+
+        
+        inputvals.push_back(temp);
+
+
+    }
+
+
+    inputs.close();
+    cout << "closed" << endl;
+
+    // now actually check the damn solution
+    int actualweight=0;
+    set<int> unionset;
+    for (int i : solution) {
+        actualweight += inputvals[i - 1].weight;
+        for (int j : inputvals[i - 1].intSet) {
+            unionset.insert(j);
+        }
+    }
+    if (actualweight == solWeight) {
+        cout << "Weight is equal" << endl;
+    }
+    else {
+        cout << "Weight is not equal" << endl;
+    }
+    if (unionset.size() == n) {
+        cout << "Union is correct" << endl;
+    }
+    else
+    {
+        cout << "Union is NOT correct" << endl;
+    }
 
 }
