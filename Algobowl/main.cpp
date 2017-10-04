@@ -143,7 +143,7 @@ void ReadInputs(string filename) {
 
         }
 
-
+        cout << idCount << endl;
 
 	}
 
