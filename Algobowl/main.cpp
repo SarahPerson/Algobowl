@@ -28,7 +28,7 @@ vector<Subset>  FindSubset();
 int main() {
     cout << "Hello World!\n";
 	ReadInputs("input.txt");
-    cin >> n;
+
     //print each element in map
     cout << "elements in map" << endl;
     for (auto iterator = subsets.begin(); iterator != subsets.end(); iterator++) {
@@ -123,7 +123,8 @@ void ReadInputs(string filename) {
         // set the id 
         temp.id = "S" + to_string(idCount);
         
-        /* //Original buliding subset subroutine
+        /*
+         //Original buliding subset subroutine
 		do {										
 			inputs >> input;
 			temp.intSet.insert(stoi(input));
@@ -165,6 +166,7 @@ void ReadInputs(string filename) {
 
 
 	inputs.close();
+    cout << "closed" << endl;
 }
 
 void ReadSolution(string filename) {
