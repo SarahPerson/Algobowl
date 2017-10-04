@@ -27,7 +27,7 @@ vector<Subset>  FindSubset();
 
 int main() {
     cout << "Hello World!\n";
-	ReadInputs("input.txt");
+	ReadInputs("test.txt");
 
     //print each element in map
     cout << "elements in map" << endl;
@@ -58,6 +58,7 @@ vector<Subset>  FindSubset() {
     Subset maximum ;
     Subset next;
     vector<Subset> solution;
+    /*
     for (auto iterator = subsets.begin(); iterator != subsets.end(); iterator++) {
         // clear solution
         solution.clear();
@@ -97,6 +98,36 @@ vector<Subset>  FindSubset() {
         }
         
 
+        //check if set has been filled
+        if (subset.intSet.size() == n) {
+            return solution;
+        }
+
+
+    }
+    */
+
+    //get starting element and add to solution
+    subset = subsets.begin()->second;
+    solution.push_back(subset);
+
+    for (auto iterator = subsets.begin(); iterator != subsets.end(); iterator++) {
+        
+        //get starting elementand add to solution
+        current = iterator->second;
+        solution.push_back(subset);
+
+        // check if element increases size of the set
+        if (subset.setUnion(current).size() > subset.intSet.size())
+        {
+            //add element to subset
+            // find the union with the new maximum
+            subset.intSet = subset.setUnion(current);
+            //add to the solution
+            solution.push_back(current);
+        }
+
+    
         //check if set has been filled
         if (subset.intSet.size() == n) {
             return solution;
