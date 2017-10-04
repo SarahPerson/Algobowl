@@ -22,18 +22,74 @@ void ReadSolution(string filename);
 void WriteSolution();
 void SolutionChecker();
 void WriteInputFile();
+vector<Subset>  FindSubset();
 
 int main() {
     cout << "Hello World!\n";
 	ReadInputs("test.txt");
 
+    //print each element in map
+    cout << "elements in map" << endl;
     for (auto iterator = subsets.begin(); iterator != subsets.end(); iterator++) {
         cout << iterator->second.ToString() << endl;
-        // Repeat if you also want to iterate through the second map.
+    }
+
+    
+    cout << "solution" << endl;
+    vector<Subset> result = FindSubset();
+
+    for (int i = 0; i < result.size(); i++) {
+        cout << result[i].ToString() << endl;
     }
 
     //WriteInputFile(); //only run if you want to recreate the input file
     return 0;
+}
+
+vector<Subset>  FindSubset() {
+    Subset subset;
+    Subset current = Subset(set<int>(), 0, "S_");
+    Subset maximum ;
+    Subset next;
+    vector<Subset> solution;
+    for (auto iterator = subsets.begin(); iterator != subsets.end(); iterator++) {
+        // clear solution
+        solution.clear();
+
+        //get starting elementand add to solution
+        subset = iterator->second;
+        solution.push_back(subset);
+
+        // initialize maximum
+        maximum = Subset(set<int>(), 0, "S_");
+
+        // find set that maximizes the length of the union
+        for (auto j = iterator; j != std::prev(subsets.end()); j++) {
+            current = j->second;
+
+            //check if the current or the current max makes the union larger
+            if (subset.setUnion(current).size > subset.setUnion(maximum).size) {
+                maximum = current;
+            }
+            //if the same, select the one with the lowest weight
+            else if (subset.setUnion(current).size = subset.setUnion(maximum).size) {
+                if (current.weight < maximum.weight) {
+                    maximum = current;
+                }
+            }
+        }
+        // find the union with the new maximum
+        subset.intSet = subset.setUnion(maximum);
+        //add to the solution
+        solution.push_back(maximum);
+
+        //check if set has been filled
+        if (subset.intSet.size = n) {
+            return solution;
+        }
+
+
+    }
 }
 
 void ReadInputs(string filename) {
@@ -55,28 +111,26 @@ void ReadInputs(string filename) {
         // set the id 
         temp.id = "S" + to_string(idCount);
 
-        //set<int> temp;
 		do {										//Build subset
 			inputs >> input;
-			temp.set.insert(stoi(input));
+			temp.intSet.insert(stoi(input));
 		} while (inputs.peek() != '\n');
+
         // get the weight of the subset
         inputs >> input;
         temp.weight = stoi(input);
-		//subsets.push_back(temp);				//Add subset to vector
-		//inputs >> input;
-		//weights.push_back(stoi(input));			//Add weight to vector at same index. This links their index as a pseudo-ID
-        idCount++; //increment id count
-        //cout << temp.ToString();
 
-        auto found = subsets.find(temp.set);
+        idCount++; //increment id count
+
+
+        auto found = subsets.find(temp.intSet);
         if ( found == subsets.end()) {
-            subsets[temp.set]=temp;
-        }
-        else {
+            subsets[temp.intSet]=temp;
+        } else {
+
             //if current value is less than the one in the map, replace it
-            if (subsets.at(temp.set).weight > temp.weight) {
-                subsets.at(temp.set) = temp;
+            if (subsets.at(temp.intSet).weight > temp.weight) {
+                subsets.at(temp.intSet) = temp;
             }
 
         }
