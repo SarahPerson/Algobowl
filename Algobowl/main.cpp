@@ -64,24 +64,32 @@ vector<Subset>  FindSubset() {
         maximum = Subset(set<int>(), 0, "S_");
 
         // find set that maximizes the length of the union
-        for (auto j = iterator; j != std::prev(subsets.end()); j++) {
-            current = j->second;
+        for (int count = 0; count < subsets.size(); count++) {
+            for (auto j = subsets.begin(); j != std::prev(subsets.end()); j++) {
+                current = j->second;
 
-            //check if the current or the current max makes the union larger
-            if (subset.setUnion(current).size() > subset.setUnion(maximum).size()) {
-                maximum = current;
-            }
-            //if the same, select the one with the lowest weight
-            else if (subset.setUnion(current).size() == subset.setUnion(maximum).size()) {
-                if (current.weight < maximum.weight) {
+                //check if the current or the current max makes the union larger
+                if (subset.setUnion(current).size() > subset.setUnion(maximum).size()) {
                     maximum = current;
                 }
+                //if the same, select the one with the lowest weight
+                else if (subset.setUnion(current).size() == subset.setUnion(maximum).size()) {
+                    if (current.weight < maximum.weight) {
+                        maximum = current;
+                    }
+                }
+            }
+            // find the union with the new maximum
+            subset.intSet = subset.setUnion(maximum);
+            //add to the solution
+            solution.push_back(maximum);
+
+            //check if set has been filled
+            if (subset.intSet.size() == n) {
+                return solution;
             }
         }
-        // find the union with the new maximum
-        subset.intSet = subset.setUnion(maximum);
-        //add to the solution
-        solution.push_back(maximum);
+        
 
         //check if set has been filled
         if (subset.intSet.size() == n) {
